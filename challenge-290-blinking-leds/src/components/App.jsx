@@ -1,5 +1,8 @@
-const React = require('react');
-const _ = require('lodash');
+import React from 'react';
+import _ from 'lodash';
+import {observable} from 'mobx';
+import {observer} from 'mobx-react';
+import CodeMirror from 'react-codemirror';
 
 function LED(props){
 	const style = {
@@ -13,7 +16,7 @@ function LED(props){
 	};
 
 	if(props.on){
-		style.background = 'green';		
+		style.background = 'green';
 	} else {
 		style.background = 'white';
 	}
@@ -24,49 +27,45 @@ function LED(props){
 	);
 }
 
-class App extends React.Component {
+export class AppState {
+	leds = observable([
+		{id: 0, on: false},
+		{id: 1, on: false},
+		{id: 2, on: false},
+		{id: 3, on: false},
+		{id: 4, on: false},
+		{id: 5, on: false},
+		{id: 6, on: false},
+		{id: 7, on: false}
+	]);
+}
 
-	state = {
-		leds: [
-			{id: 0, on: false},
-			{id: 1, on: false},
-			{id: 2, on: false},
-			{id: 3, on: false},
-			{id: 4, on: false},
-			{id: 5, on: false},
-			{id: 6, on: false},
-			{id: 7, on: false}
-		]
+@observer
+export class App extends React.Component {
+	static propTypes = {
+		appState: React.PropTypes.object.isRequired
 	}
 
-
 	render(){
+		const editorOptions = {
+			lineNumbers: true
+		};
+		const appState = this.props.appState;
 		return (
 			<div>
 				{this._renderLEDs()}
+				<CodeMirror value={appState.code} onChange={this._updateCode} options={editorOptions} />
 			</div>
 		);
 	}
-	
+
 	_renderLEDs = () => {
-		return _.map(this.state.leds, (led, i) => {
+		return _.map(this.props.appState.leds, (led, i) => {
 			return <LED key={i} on={led.on} onClick={() => this._onToggleLED(led)} />
 		});
 	}
 
 	_onToggleLED = (toggledLED) => {
-		const newLEDS = _.map(this.state.leds,  led => {
-			if(toggledLED.id === led.id){
-				return {id: led.id, on: !led.on};
-			}
-			return led;
-		});
-		this.setState({
-			leds: newLEDS
-		});
+		toggledLED.on = !toggledLED.on;
 	}
 }
-
-module.exports = {
-	App
-};

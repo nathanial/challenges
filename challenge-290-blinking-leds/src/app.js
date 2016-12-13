@@ -1,10 +1,9 @@
-require("babel-register");
 const React = require('react');
 const ReactDOM = require('react-dom');
-const {App} = require('./components/App.jsx');
+const {App, AppState} = require('./components/App.jsx');
 
 function main(){
-	ReactDOM.render(React.createElement(App), document.getElementById('app'));
+	const state = new AppState();
+	ReactDOM.render(React.createElement(App, {appState: state}), document.getElementById('app'));
 }
 main();
-
