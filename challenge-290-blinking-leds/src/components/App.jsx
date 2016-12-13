@@ -3,6 +3,7 @@ import _ from 'lodash';
 import {observable, autorun, reaction} from 'mobx';
 import {observer} from 'mobx-react';
 import CodeMirror from 'react-codemirror';
+import {LEDCodeInterpreter} from './interpreter/LEDCodeInterpreter';
 
 function LED(props){
 	const style = {
@@ -63,6 +64,16 @@ class Machine {
 		this.persist();
 	}
 
+	executeCode = () => {
+		const interpreter = new LEDCodeInterpreter();
+		const state = interpreter.run(this.code);
+		for(let led of state.leds){
+			const machineLED = _.find(this.leds, {id: led.id});
+			machineLED.on = led.on;
+		}
+		this.persist();
+	}
+
 	persist = () => {
 		localStorage.setItem('machine', JSON.stringify(this));
 	}
@@ -91,6 +102,13 @@ export class App extends React.Component {
 			border: '1px solid black',
 			display: 'inline-block'
 		};
+		const buttonStyle = {
+			 display: 'block',
+			 position: 'relative',
+			 width: 100,
+			 height: 45,
+			 marginTop: 20
+		};
 		const appState = this.props.appState;
 		return (
 			<div>
@@ -102,6 +120,9 @@ export class App extends React.Component {
 											onChange={this._updateCode}
 											options={editorOptions} />
 				</div>
+				<button style={buttonStyle} onClick={this._executeCode}>
+					Execute
+				</button>
 			</div>
 		);
 	}
@@ -119,5 +140,9 @@ export class App extends React.Component {
 
 	_updateCode = (newCode) => {
 		this.props.appState.machine.updateCode(newCode);
+	}
+
+	_executeCode = () => {
+		this.props.appState.machine.executeCode();
 	}
 }
