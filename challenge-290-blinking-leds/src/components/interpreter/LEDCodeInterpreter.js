@@ -7,6 +7,8 @@ export class LEDCodeInterpreter {
 			a: 0,
 			b: 0
 		};
+		this.labels = {};
+		this.lineNumber = 0;
 		this.state = {
 			leds: [
 				{id: 0, on: false},
@@ -22,8 +24,12 @@ export class LEDCodeInterpreter {
 	}
 
 	async run(code, options){
-		for(let line of code.split('\n')){
+		const lines = code.split('\n');
+		this.lineNumber = 0;
+		while(this.lineNumber < lines.length){
+			const line = lines[this.lineNumber];
 			await this.executeLine(line, options);
+			this.lineNumber += 1;
 		}
 	}
 
@@ -32,23 +38,43 @@ export class LEDCodeInterpreter {
 			return;
 		}
 		line = _.trim(line).replace(/\t/g, ' ');
-		const [cmd, args] = this._parseTokens(line);
-		if(cmd === 'ld'){
-			const [register, value] = args.split(',');
-			this._load(register, value);
-		} else if(cmd === 'out') {
-			const [token, register] = args.split(',');
-			this._out(register);
+		const tokens = this._parseTokens(line);
+		if(tokens.length === 1){
+			this._createLabel(tokens[0]);
 		} else {
-			console.error('Bad Line', line);
-			throw new Error('Unrecognized command: ' + cmd);
+			const [cmd, args] = this._parseTokens(line);
+			if(cmd === 'ld'){
+				const [register, value] = args.split(',');
+				this._load(register, value);
+			} else if(cmd === 'out') {
+				const [token, register] = args.split(',');
+				this._out(register);
+			} else if(cmd === 'djnz') {
+				const label = args;
+				this._djnz(label);
+			} else {
+				console.error('Bad Line', line);
+				throw new Error('Unrecognized command: ' + cmd);
+			}
+			options.afterInstruction(this.state);
+			return new Promise((resolve) => {
+				setTimeout(() => {
+					resolve();
+				}, 200);
+			});
 		}
-		options.afterInstruction(this.state);
-		return new Promise((resolve) => {
-			setTimeout(() => {
-				resolve();
-			}, 200);
-		});
+	}
+
+	_createLabel(name){
+		name = name.replace(':','');
+		this.labels[name] = this.lineNumber;
+	}
+
+	_djnz(label){
+		this.registers.b -= 1;
+		if(this.registers.b > 0){
+			this.lineNumber = this.labels[label];
+		}
 	}
 
 	_load(register, value){
