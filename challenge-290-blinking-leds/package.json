@@ -9,7 +9,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "node-jsx": "^0.13.3",
+    "babel-plugin-transform-class-properties": "^6.19.0",
+    "babel-plugin-transform-react-jsx": "^6.8.0",
+    "babel-register": "^6.18.0",
+    "lodash": "^4.17.2",
     "react": "^15.4.1",
     "react-dom": "^15.4.1"
   },
