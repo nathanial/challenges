@@ -33,15 +33,26 @@ export class LEDCodeInterpreter {
 		}
 		line = _.trim(line).replace(/\t/g, ' ');
 		const [cmd, args] = this._parseTokens(line);
-		switch(cmd){
-			case 'ld':
-				console.log("Load", args);
-				break;
-			case 'out':
-				console.log("Out", args);
-				break;
-			default:
-				throw new Error('Unrecognized command: ' + cmd);
+		if(cmd === 'ld'){
+			const [register, value] = args.split(',');
+			this._load(register, value);
+		} else if(cmd === 'out') {
+			const [token, register] = args.split(',');
+			this._out(register);
+		} else {
+			throw new Error('Unrecognized command: ' + cmd);
+		}
+	}
+
+	_load(register, value){
+		this.registers[register] = parseInt(value, 10);
+	}
+
+	_out(register){
+		var value = this.registers[register];
+		for(var i = 0; i < 8; i++){
+			var on = (value >> (7 - i)) & 0x01;
+			this.state.leds[i].on = on;
 		}
 	}
 
