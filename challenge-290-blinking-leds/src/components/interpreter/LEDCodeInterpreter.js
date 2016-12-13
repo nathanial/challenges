@@ -4,7 +4,8 @@ export class LEDCodeInterpreter {
 
 	constructor(){
 		this.registers = {
-			a: 0
+			a: 0,
+			b: 0
 		};
 		this.state = {
 			leds: [
@@ -20,15 +21,14 @@ export class LEDCodeInterpreter {
 		}
 	}
 
-	run(code){
+	async run(code, options){
 		for(let line of code.split('\n')){
-			this.executeLine(line);
+			await this.executeLine(line, options);
 		}
-		return this.state;
 	}
 
-	executeLine(line){
-		if(_.isEmpty(line)){
+	executeLine(line, options){
+		if(_.isEmpty(_.trim(line))){
 			return;
 		}
 		line = _.trim(line).replace(/\t/g, ' ');
@@ -40,8 +40,15 @@ export class LEDCodeInterpreter {
 			const [token, register] = args.split(',');
 			this._out(register);
 		} else {
+			console.error('Bad Line', line);
 			throw new Error('Unrecognized command: ' + cmd);
 		}
+		options.afterInstruction(this.state);
+		return new Promise((resolve) => {
+			setTimeout(() => {
+				resolve();
+			}, 200);
+		});
 	}
 
 	_load(register, value){

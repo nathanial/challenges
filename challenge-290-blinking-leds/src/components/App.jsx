@@ -66,12 +66,14 @@ class Machine {
 
 	executeCode = () => {
 		const interpreter = new LEDCodeInterpreter();
-		const state = interpreter.run(this.code);
-		for(let led of state.leds){
-			const machineLED = _.find(this.leds, {id: led.id});
-			machineLED.on = led.on;
-		}
-		this.persist();
+		interpreter.run(this.code, {
+			afterInstruction: (state) => {
+				for(let led of state.leds){
+					const machineLED = _.find(this.leds, {id: led.id});
+					machineLED.on = led.on;
+				}
+			}
+		});
 	}
 
 	persist = () => {
