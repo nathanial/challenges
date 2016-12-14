@@ -39,7 +39,7 @@ export class LEDCodeInterpreter {
 		}
 		line = _.trim(line).replace(/\t/g, ' ');
 		const tokens = this._parseTokens(line);
-		if(tokens.length === 1){
+		if(tokens.length === 1 && tokens[0].indexOf(':') !== -1){
 			this._createLabel(tokens[0]);
 		} else {
 			const [cmd, args] = this._parseTokens(line);
@@ -52,6 +52,18 @@ export class LEDCodeInterpreter {
 			} else if(cmd === 'djnz') {
 				const label = args;
 				this._djnz(label);
+			} else if(cmd === 'rlca'){
+				const oldValue = this.registers.a;
+				this.registers.a <<= 1;
+				if(oldValue & 0x80){
+					this.registers.a |= 0x01;
+				}
+			} else if(cmd === 'rrca') {
+				const oldValue = this.registers.a;
+				this.registers.a >>= 1;
+				if(oldValue & 0x01){
+					this.registers.a |= 0x80;
+				}
 			} else {
 				console.error('Bad Line', line);
 				throw new Error('Unrecognized command: ' + cmd);
@@ -83,6 +95,7 @@ export class LEDCodeInterpreter {
 
 	_out(register){
 		var value = this.registers[register];
+		console.log("VALUE", value);
 		for(var i = 0; i < 8; i++){
 			var on = (value >> (7 - i)) & 0x01;
 			this.state.leds[i].on = on;
