@@ -3,20 +3,13 @@ import _ from 'lodash';
 import {observable, autorun, reaction} from 'mobx';
 import {observer} from 'mobx-react';
 import FontFamilySelect from './FontFamilySelect';
+import FontSizeSelect from './FontSizeSelect';
 
 export class AppState {
 	textSettings = observable({
-		fontFamily: 'Georgia'
+		fontFamily: 'Georgia',
+		fontSize: 12
 	});
-}
-
-
-class FontSizeSelect extends React.Component {
-	render(){
-		return (
-			<div></div>
-		);
-	}
 }
 
 class ColorSwatch extends React.Component {
@@ -91,6 +84,10 @@ class TextControls extends React.Component {
 
 	_onChangeFontFamily = (fontFamily) => {
 		this.props.textSettings.fontFamily = fontFamily;
+	}
+
+	_onChangeFontSize = (size) => {
+		this.props.textSettings.fontSize = size;
 	}
 }
 
