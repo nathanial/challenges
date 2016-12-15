@@ -5,22 +5,14 @@ import {observer} from 'mobx-react';
 import FontFamilySelect from './FontFamilySelect';
 import FontSizeSelect from './FontSizeSelect';
 import ColorSwatch from './ColorSwatch';
+import TextStyleButtons from './TextStyleButtons';
+
 
 export class AppState {
 	textSettings = observable({
 		fontFamily: 'Georgia',
 		fontSize: 12
 	});
-}
-
-
-
-class TextStyleButtons extends React.Component {
-	render(){
-		return (
-			<div></div>
-		);
-	}
 }
 
 class AlignmentButtons extends React.Component {

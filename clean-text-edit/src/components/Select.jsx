@@ -1,5 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
+import {buttonStyle} from './style';
 
 export class Option extends React.Component {
 
@@ -58,22 +59,14 @@ export class Select extends React.Component {
 	};
 
 	render(){
-		const style = {
-			position: 'relative',
-			display: 'inline-block',
+		const style = _.defaults({
 			margin: '0 7px',
 			width: 125,
 			height: 25,
-			background: 'linear-gradient(to top, #f0f0f0, #f7f7f7)',
-			border: '1px solid #c2c2c2',
-			color: '#636363',
 			fontSize: 13,
 			textAlign: 'left',
 			paddingLeft: 8,
-			verticalAlign: 'middle',
-			lineHeight: '25px',
-			transition: 'background 0.2s ease-in-out'
-		};
+		}, buttonStyle);
 		if(this.state.open){
 			style.background = 'white';
 		}
