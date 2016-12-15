@@ -61,7 +61,7 @@ export class Select extends React.Component {
 		const style = {
 			position: 'relative',
 			display: 'inline-block',
-			margin: '0 10px',
+			margin: '0 7px',
 			width: 125,
 			height: 25,
 			background: 'linear-gradient(to top, #f0f0f0, #f7f7f7)',

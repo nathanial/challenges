@@ -4,6 +4,7 @@ import {observable, autorun, reaction} from 'mobx';
 import {observer} from 'mobx-react';
 import FontFamilySelect from './FontFamilySelect';
 import FontSizeSelect from './FontSizeSelect';
+import ColorSwatch from './ColorSwatch';
 
 export class AppState {
 	textSettings = observable({
@@ -12,13 +13,7 @@ export class AppState {
 	});
 }
 
-class ColorSwatch extends React.Component {
-	render(){
-		return (
-			<div></div>
-		);
-	}
-}
+
 
 class TextStyleButtons extends React.Component {
 	render(){
