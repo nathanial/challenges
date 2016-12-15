@@ -2,6 +2,7 @@ import React from 'react';
 import _ from 'lodash';
 import {observable, autorun, reaction} from 'mobx';
 import {observer} from 'mobx-react';
+import FontFamilySelect from './FontFamilySelect';
 
 export class AppState {
 	textSettings = observable({
@@ -9,61 +10,6 @@ export class AppState {
 	});
 }
 
-const fontFamilies = [
-	'Georgia',
-	'Arial',
-	'Cantarell',
-	'DejuVu Sans Mono'
-];
-
-class FontFamilySelect extends React.Component {
-
-	static propTypes = {
-		value: React.PropTypes.string.isRequired
-	}
-
-	render(){
-		const style = {
-			position: 'relative',
-			borderRadius: 3,
-			width: 125,
-			height: 25,
-			background: 'linear-gradient(to top, #f0f0f0, #f7f7f7)',
-			border: '1px solid #c2c2c2',
-			color: '#636363',
-			fontSize: 13,
-			textAlign: 'left',
-			paddingLeft: 8,
-			verticalAlign: 'middle',
-			lineHeight: '25px'
-		};
-		const selectorStyle = {
-			position: 'absolute',
-			right: 7,
-			top: 3,
-			color: '#a1a1a1',
-			fontSize: 11
-		};
-		const selectorIconStyle = {
-			display: 'block',
-			height: 9
-		};
-		return (
-			<div style={style}>
-				{_.map(fontFamilies, fontFamily => {
-					const optionStyle = {};
-					if(fontFamily === this.props.value){
-						return <div key={fontFamily}>{fontFamily}</div>;
-					}
-				})}
-				<div style={selectorStyle}>
-					<i style={selectorIconStyle} className="fa fa-caret-up" ></i>
-					<i style={selectorIconStyle} className="fa fa-caret-down"></i>
-				</div>
-			</div>
-		);
-	}
-}
 
 class FontSizeSelect extends React.Component {
 	render(){
@@ -113,6 +59,7 @@ class LineSpacingButton extends React.Component {
 	}
 }
 
+@observer
 class TextControls extends React.Component {
 
 	static propTypes = {
@@ -140,6 +87,10 @@ class TextControls extends React.Component {
 				<LineSpacingButton value={settings.lineSpacing} onChange={this._onChangeLineSpacing} />
 			</div>
 		);
+	}
+
+	_onChangeFontFamily = (fontFamily) => {
+		this.props.textSettings.fontFamily = fontFamily;
 	}
 }
 
