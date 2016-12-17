@@ -7,7 +7,7 @@ import FontSizeSelect from './FontSizeSelect';
 import ColorSwatch from './ColorSwatch';
 import TextStyleButtons from './TextStyleButtons';
 import AlignmentButtons from './AlignmentButtons';
-
+import CodeMirror from 'react-codemirror';
 
 export class AppState {
 	textSettings = observable({
@@ -48,17 +48,31 @@ class TextControls extends React.Component {
 			display: 'inline-block'
 		};
 
+		const editorContainer = {
+			position: 'absolute',
+			left: '10px',
+			top: '50px',
+			right: '10px',
+			bottom: 0,
+			background: '#f5f5f5'
+		};
+
 		const settings = this.props.textSettings;
 
 		return (
 			<div>
-				<FontFamilySelect value={settings.fontFamily} onChange={this._onChangeFontFamily} />
-				<FontSizeSelect value={settings.fontSize} onChange={this._onChangeFontSize} />
-				<ColorSwatch value={settings.color} onChange={this._onChangeColor} />
-				<TextStyleButtons value={settings.textStyle} onChange={this._onChangeTextStyle} />
-				<AlignmentButtons value={settings.alignment} onChange={this._onChangeAlignment} />
-				<ListButton onClick={this._createList} />
-				<LineSpacingButton value={settings.lineSpacing} onChange={this._onChangeLineSpacing} />
+				<div>
+					<FontFamilySelect value={settings.fontFamily} onChange={this._onChangeFontFamily} />
+					<FontSizeSelect value={settings.fontSize} onChange={this._onChangeFontSize} />
+					<ColorSwatch value={settings.color} onChange={this._onChangeColor} />
+					<TextStyleButtons value={settings.textStyle} onChange={this._onChangeTextStyle} />
+					<AlignmentButtons value={settings.alignment} onChange={this._onChangeAlignment} />
+					<ListButton onClick={this._createList} />
+					<LineSpacingButton value={settings.lineSpacing} onChange={this._onChangeLineSpacing} />
+				</div>
+				<div style={editorContainer}>
+					<CodeMirror />
+				</div>
 			</div>
 		);
 	}
