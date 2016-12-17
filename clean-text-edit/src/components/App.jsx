@@ -6,6 +6,7 @@ import FontFamilySelect from './FontFamilySelect';
 import FontSizeSelect from './FontSizeSelect';
 import ColorSwatch from './ColorSwatch';
 import TextStyleButtons from './TextStyleButtons';
+import AlignmentButtons from './AlignmentButtons';
 
 
 export class AppState {
@@ -15,13 +16,6 @@ export class AppState {
 	});
 }
 
-class AlignmentButtons extends React.Component {
-	render(){
-		return (
-			<div></div>
-		);
-	}
-}
 
 class ListButton extends React.Component {
 	render(){

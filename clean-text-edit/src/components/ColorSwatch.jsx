@@ -1,14 +1,15 @@
 import React from 'react';
 import _ from 'lodash';
 import {buttonStyle} from './style';
+import Button from './Button';
 
 export default class ColorSwatch extends React.Component {
 	render(){
-		const style = _.defaults({
+		const style = {
 			margin: '0 7px',
 			width: 30,
 			height: 25,
-		}, buttonStyle);
+		};
 		const swatchStyle = {
 			position: 'relative',
 			top: 6,
@@ -19,9 +20,9 @@ export default class ColorSwatch extends React.Component {
 			outline: '1px solid black'
 		};
 		return (
-			<div style={style}>
+			<Button style={style}>
 				<div style={swatchStyle}></div>
-			</div>
+			</Button>
 		);
 	}
 }
