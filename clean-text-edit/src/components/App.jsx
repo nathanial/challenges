@@ -8,6 +8,7 @@ import ColorSwatch from './ColorSwatch';
 import TextStyleButtons from './TextStyleButtons';
 import AlignmentButtons from './AlignmentButtons';
 import CodeMirror from 'react-codemirror';
+import QuillComponent from 'react-quill';
 
 export class AppState {
 	textSettings = observable({
@@ -48,14 +49,6 @@ class TextControls extends React.Component {
 			display: 'inline-block'
 		};
 
-		const editorContainer = {
-			position: 'absolute',
-			left: '10px',
-			top: '50px',
-			right: '10px',
-			bottom: 0,
-			background: '#f5f5f5'
-		};
 
 		const settings = this.props.textSettings;
 
@@ -69,9 +62,6 @@ class TextControls extends React.Component {
 					<AlignmentButtons value={settings.alignment} onChange={this._onChangeAlignment} />
 					<ListButton onClick={this._createList} />
 					<LineSpacingButton value={settings.lineSpacing} onChange={this._onChangeLineSpacing} />
-				</div>
-				<div style={editorContainer}>
-					<CodeMirror />
 				</div>
 			</div>
 		);
@@ -94,10 +84,25 @@ export class App extends React.Component {
 
 	render(){
 		const appState = this.props.appState;
+		const editorContainer = {
+			position: 'absolute',
+			left: '10px',
+			top: '50px',
+			right: '10px',
+			bottom: 0,
+			background: '#f5f5f5'
+		};
 		return (
 			<div>
 				<TextControls textSettings={appState.textSettings} />
+				<div style={editorContainer}>
+					<QuillComponent ref="editor" toolbar={false} />
+				</div>
 			</div>
 		);
+	}
+
+	componentDidMount = () => {
+		console.log("Editor", this.refs.editor);
 	}
 }

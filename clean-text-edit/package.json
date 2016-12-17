@@ -22,8 +22,9 @@
     "mobx": "^2.7.0",
     "mobx-react": "^4.0.3",
     "react": "^15.4.1",
+    "react-codemirror": "^0.3.0",
     "react-dom": "^15.4.1",
-		"react-codemirror": "^0.3.0"
+    "react-quill": "^0.4.1"
   },
   "devDependencies": {
     "electron": "^1.4.12"
